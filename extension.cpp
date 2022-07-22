@@ -87,18 +87,23 @@ void SoftDetector::SDK_OnAllLoaded() {
 		else cout << "failed detour" << endl;
 	}
 	
-	playerhelpers->AddClientListener(&g_SoftDetector);
+	playerhelpers->AddClientListener(this);
 }
 
 void SoftDetector::SDK_OnUnload() {
-//
+	if (g_pProcessListenEventsDetour) {
+		g_pProcessListenEventsDetour->Destroy();
+		g_pProcessListenEventsDetour = nullptr;
+	}
+	
+	playerhelpers->RemoveClientListener(this);
 }
 
-void SoftDetector::OnClientPutInServer(int client) {
+void SoftDetector::OnClientPostAdminCheck(int client) {
 	IGamePlayer *pClient = playerhelpers->GetGamePlayer(client);
 	if (pClient->IsFakeClient()) return;
 	
-	if (g_iCountEvents[client] == 0) g_pSM->LogMessage(myself, "PutInServer Kick: %s | events: %d", pClient->GetName(), g_iCountEvents[client]);
+	if (g_iCountEvents[client] == 0) g_pSM->LogMessage(myself, "PostAdminCheck Kick: %s | events: %d", pClient->GetName(), g_iCountEvents[client]);
 }
 
 void SoftDetector::OnClientDisconnected(int client) {

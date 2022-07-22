@@ -67,7 +67,7 @@ public:
 	virtual void SDK_OnAllLoaded();
 	
 	public:
-		virtual void OnClientPutInServer(int client);
+		virtual void OnClientPostAdminCheck(int client);
 		virtual void OnClientDisconnected(int client);
 
 	/**
