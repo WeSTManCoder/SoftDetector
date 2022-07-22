@@ -63,7 +63,7 @@ DETOUR_DECL_MEMBER1(ProcessListenEventsHook, bool, CLC_ListenEvents *, msg) {
 			if (msg->m_EventArray.Get(i)) g_iCountEvents[client]++;
 			
 		ConMsg(0, "%s - event count: %d\n", pBaseClient->GetClientName(), g_iCountEvents[client]);
-		if (g_iCountEvents[client] > 25 && g_iCountEvents[client] < 78) ConMsg(0, "[SoftDetector]::HookListenEvent Kick: %s | events: %d\n", pBaseClient->GetClientName(), g_iCountEvents[client]);
+		if (g_iCountEvents[client] > 25 && g_iCountEvents[client] < 78) g_pSM->LogMessage(myself, "HookListenEvent Kick: %s | events: %d", pBaseClient->GetClientName(), g_iCountEvents[client]);
 	}
 	
 	return DETOUR_MEMBER_CALL(ProcessListenEventsHook)(msg);
@@ -98,7 +98,7 @@ void SoftDetector::OnClientPutInServer(int client) {
 	IGamePlayer *pClient = playerhelpers->GetGamePlayer(client);
 	if (pClient->IsFakeClient()) return;
 	
-	if (g_iCountEvents[client] == 0) ConMsg(0, "[SoftDetector]::PutInServer Kick: %s | events: %d", pClient->GetName(), g_iCountEvents[client]);
+	if (g_iCountEvents[client] == 0) g_pSM->LogMessage(myself, "PutInServer Kick: %s | events: %d", pClient->GetName(), g_iCountEvents[client]);
 }
 
 void SoftDetector::OnClientDisconnected(int client) {
