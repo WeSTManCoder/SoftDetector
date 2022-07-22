@@ -1,5 +1,5 @@
-#ifndef _NETMESSAGES_H
-#define _NETMESSAGES_H
+#ifndef _NETMESSAGES_H_
+#define _NETMESSAGES_H_
 
 #define NETMSG_TYPE_BITS 			5
 #define MAX_PLAYER_NAME_LENGTH		32
@@ -12,7 +12,6 @@
 #include <inetmsghandler.h>
 #include <inetmessage.h>
 #include <tier1/bitbuf.h>
-#include <tier1/checksum_crc.h>
 #include <bitvec.h>
 
 #define DECLARE_BASE_MESSAGE( msgtype )						\
@@ -28,8 +27,6 @@
 	DECLARE_BASE_MESSAGE( clc_##name );	\
 	IClientMessageHandler *m_pMessageHandler;\
 	bool Process() { return m_pMessageHandler->Process##name( this ); }\
-	
-#define Bits2Bytes(b) ((b+7)>>3)
 
 class CNetMessage : public INetMessage {
 	public:
